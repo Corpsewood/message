@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -79,7 +79,7 @@
       "crowater": "Dude, leave us alone u disgusting scarecrow",
       "zeath": "hm, seems to be wearing a black shirt with fur, same for the pants.",
       "vill": "what are you doing here? im confused, and stop crying.",
-      "pleaze": "you okay? why do u have messy hair? did something happen?"
+      "pleaze": "you okay? why do u have messy hair? did something happen?",
       "fearful": "why dont u enter it here? https://corpsewood.github.io/Corpsewood/"
     };
 
@@ -101,9 +101,9 @@
     function sendMessage() {
       const message = userInput.value.trim();
       if (!message) return;
-      addMessage(message, true);  // Add user message with right alignment
+      addMessage(message, true);
       setTimeout(() => {
-        addMessage(getBotReply(message), false);  // Add reply without label
+        addMessage(getBotReply(message), false);
       }, 500);
       userInput.value = '';
       userInput.focus();
@@ -116,4 +116,3 @@
   </script>
 </body>
 </html>
-
