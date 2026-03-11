@@ -76,11 +76,9 @@ function send() {
 btn.addEventListener("click", send);
 input.addEventListener("keypress", e => { if(e.key==="Enter") send(); });
 
-// === Anti-DevTools Self-Destruct ===
+// === Anti-DevTools Self-Destruct to about:blank ===
 function selfDestruct() {
-  document.documentElement.innerHTML = "";
-  document.documentElement.style.background = "black";
-  document.documentElement.style.color = "black";
+  window.location.href = "about:blank";
 }
 
 // Detect DevTools by window size
