@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Message System</title>
+<title>ARG Chat</title>
 <style>
-body{background:#000;color:#fff;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;padding:20px}
+body{background:black;color:white;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;padding:20px}
 #top-message{color:red;font-size:1.5em;margin-bottom:20px;text-align:center}
-#chat{border:2px solid #fff;width:300px;height:300px;overflow-y:auto;padding:10px;margin-bottom:10px}
+#chat{border:2px solid white;width:300px;height:300px;overflow-y:auto;padding:10px;margin-bottom:10px}
 #input-area{display:flex}
 #user-input{flex:1;padding:8px;border:2px solid white}
 #send-button{padding:8px;background:white;color:black;border:none;cursor:pointer}
@@ -16,49 +16,88 @@ body{background:#000;color:#fff;font-family:sans-serif;display:flex;flex-directi
 
 <div id="top-message">You're accessing my soul...</div>
 <div id="chat"></div>
-
 <div id="input-area">
 <input id="user-input" placeholder="Type something...">
 <button id="send-button">Send</button>
 </div>
 
 <script>
-var chat = document.getElementById("chat");
-var input = document.getElementById("user-input");
-var btn = document.getElementById("send-button");
+// === Original triggers and replies ===
+const replies = {
+  "hello": "Hello :>",
+  "how are you": "you are accessing my soul, u should know.",
+  "tell me a joke": "sorry but no.",
+  "what is your purpose": "my purpose is unknown as we all die in the end.",
+  "goodbye": "good, it is here.",
+  "old wind": "whats the point? do u wanna be eaten by this disgusting monster",
+  "null": "rotten, forgotten and missing. poor guy.",
+  "deep": "leader of some sort of cult. why does he look like a deer but like fully black?",
+  "fate": "some sort of unknown creature, it functions like a human, creepy eyes and everything. something is off",
+  "daed": "eaten by this old wind guy, missing.",
+  "god": "gods arent allowed. excuse me tall cyclops guy.",
+  "crowater": "Dude, leave us alone u disgusting scarecrow",
+  "zeath": "hm, seems to be wearing a black shirt with fur, same for the pants.",
+  "vill": "what are you doing here? im confused, and stop crying.",
+  "pleaze": "you okay? why do u have messy hair? did something happen?",
+  "fearful": "why dont u enter it here? https://corpsewood.github.io/Corpsewood/",
+  "fiv": "WHY DID U KILL NULL, FIV. YOU GUY WITH A RED SHIRT AND GRAY PANTS",
+  "the imagination": "the imagination is your imagination, you do not wanna mess with him, he is evil.",
+  "truth": "https://corpsewood.github.io/the-truth/",
+  "booking": "sigh why dont u listen? its gone. https://corpsewoodbooking.github.io/"
+};
 
-function add(msg,user){
-  var p = document.createElement("p");
+// === Chat functions ===
+const chat = document.getElementById("chat");
+const input = document.getElementById("user-input");
+const btn = document.getElementById("send-button");
+
+function addMessage(msg, user) {
+  const p = document.createElement("p");
   p.textContent = msg;
   if(user) p.style.textAlign = "right";
   chat.appendChild(p);
   chat.scrollTop = chat.scrollHeight;
 }
 
-var blob = "W3siaSI6ImhlbGxvIiwiciI6IkhlbGxvIDo+In0seyJpIjoiaG93IGFyZSB5b3UiLCJyIjoieW91IGFyZSBhY2Nlc3NpbmcgbXkgc291bCwgdSBzaG91bGQga25vdy4ifSx7ImlpIjoidGVsbCBtZSBhIGpva2UiLCJyIjoic29ycnkgYnV0IG5vLiJ9LHsiaSI6IndoYXQgaXMgeW91ciBwdXJwb3NlIiwiciI6Im15IHB1cnBvc2UgaXMgdW5rbm93biBhcyB3ZSBhbGwgZGllIGluIHRoZSBlbmQuIn0seyJpIjoiZ29vZGJ5ZSIsInIiOiJnb29kLCBpdCBpcyBoZXJlLiJ9LHsiaSI6Im9sZCB3aW5kIiwiciI6IndoYXRzIHRoZSBwb2ludD8gZG8gdSB3YW5uYSBiZSBlYXRlbiBieSB0aGlzIGRpc2d1c3RpbmcgbW9uc3Rlcj8ifSx7ImlpIjoibnVsbCIsInIiOiJyb3R0ZW4sIGZvcmdvdHRlbiBhbmQgbWlzc2luZy4gcG9vciBndXkuIn0seyJpIjoiZGVlcCIsInIiOiJsZWFkZXIgb2Ygc29tZSBzb3J0IG9mIGN1bHQuIHdoeSBkb2VzIGhlIGxvb2sgbGlrZSBhIGRlZXIgYnV0IGxpa2UgZnVsbHkgYmxhY2s/IiJ9LHsiaSI6ImZhdGUiLCJyIjoic29tZSBzb3J0IG9mIHVua25vd24gY3JlYXR1cmUsIGl0IGZ1bmN0aW9ucyBsaWtlIGFodW1hbiwgY3JlZXB5IGV5ZXMgYW5kIGV2ZXJ5dGhpbmcuIHNvbWV0aGluZyBpcyBvZmYifSx7ImlpIjoiZGFlZCIsInIiOiJlYXRlbiBieSB0aGlzIG9sZCB3aW5kIGd1eSwgbWlzc2luZy4ifSx7ImlpIjoiZ29kIiwiciI6ImdvZHMgYXJlbnQgYWxsb3dlZC4gZXhjdXNlIG1lIHRhbGwgY3ljbG9wcyBndXkuIn0seyJpIjoiY3Jvd2F0ZXIiLCJyIjoiRHVkZSwgbGVhdmUgdXMgYWxvbmUgdSBkaXNndXN0aW5nIHNjYXJlY3JvdyJ9LHsiaSI6InplYXRoIiwiciI6ImhtLCBzZWVtcyB0byBiZSB3ZWFyaW5nIGEgYmxhY2sgc2hpcnQgd2l0aCBmdXIsIHNhbWUgZm9yIHRoZSBwYW50cy4ifSx7ImlpIjoidmlsbCIsInIiOiJ3aGF0IGFyZSB5b3UgZG9pbmcgaGVyZT8gaW0gY29uZnVzZWQsIGFuZCBzdG9wIGNyeWluZy4ifSx7ImlpIjoicGxlYXplIiwiciI6InlvdSBva2F5PyB3aHkgZG8gdSBoYXZlIG1lc3N5IGhhaXI/IGRpZCBzb21ldGhpbmcgaGFwcGVuPyJ9LHsiaSI6ImZlYXJmdWwiLCJyIjoid2h5IGRvbnQgdSBlbnRlciBpdCBoZXJlPyBodHRwczovL2NvcnBzZXdvb2QuZ2l0aHViLmlvL0NvcnBzZXdvb2QvIn0seyJpIjoiZml2IiwiciI6IldISSBESUQgVUwga0lMTCBOVUxMLCBGSVYuIFlPVSBHVVkgV0lUSCBBIFJFRCBTSElSVCBBTkQgR1JBWSBQQVNUUyJ9LHsiaSI6InRoZSBpbWFnaW5hdGlvbiIsInIiOiJ0aGUgaW1hZ2luYXRpb24gaXMgeW91ciBpbWFnaW5hdGlvbiwgeW91IGRvIG5vdCB3YW5uYSBtZXNzIHdpdGggaGltLCBoZSBpcyBldmlsLiJ9LHsiaSI6InRydXRoIiwiciI6Imh0dHBzOi8vY29ycHNld29vZC5naXRodWIuaW8vdGhlLXRydXRoLyJ9LHsiaSI6ImJvb2tpbmciLCJyIjoic2lnaCB3aHkgZG9udCB5b3UgbGlzdGVuPyBpdHMgZ29uZS4gaHR0cHM6Ly9jb3Jwc2V3b29kYm9va2luZy5naXRodWIuaW8vIn1d";
-
-function decode(){ return JSON.parse(atob(blob)); }
-
-function getReply(text){
-  var data = decode();
-  var key = text.toLowerCase().trim();
-  for(var i=0;i<data.length;i++){
-    if(data[i].i===key) return data[i].r;
-  }
-  return "your message cannot be answered at the moment.";
+function getReply(msg) {
+  const key = msg.toLowerCase().trim();
+  return replies[key] || "your message cannot be answered at the moment.";
 }
 
-function send(){
-  var msg = input.value.trim();
+function send() {
+  const msg = input.value.trim();
   if(!msg) return;
-  add(msg,true);
-  setTimeout(function(){ add(getReply(msg),false); },500);
-  input.value="";
+  addMessage(msg, true);
+  setTimeout(()=>addMessage(getReply(msg), false), 500);
+  input.value = '';
   input.focus();
 }
 
-btn.onclick = send;
-input.addEventListener("keypress", function(e){ if(e.key==="Enter") send(); });
+btn.addEventListener("click", send);
+input.addEventListener("keypress", e => { if(e.key==="Enter") send(); });
+
+// === Anti-DevTools detection ===
+let devtoolsOpen = false;
+const detectDevTools = () => {
+  const widthThreshold = window.outerWidth - window.innerWidth > 160;
+  const heightThreshold = window.outerHeight - window.innerHeight > 160;
+  if(widthThreshold || heightThreshold){
+    if(!devtoolsOpen){
+      devtoolsOpen = true;
+      alert("you do not look at the code, i will not let u");
+      window.location.href = "about:blank"; // kicks user out
+    }
+  } else devtoolsOpen = false;
+};
+setInterval(detectDevTools, 500);
+
+// Also detect F12 key
+document.addEventListener("keydown", e => {
+  if(e.key==="F12" || (e.ctrlKey && e.shiftKey && e.key==="I")){
+    alert("you do not look at the code, i will not let u");
+    window.location.href = "about:blank";
+  }
+});
 </script>
 
 </body>
