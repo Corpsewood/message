@@ -78,10 +78,9 @@ input.addEventListener("keypress", e => { if(e.key==="Enter") send(); });
 
 // === Anti-DevTools Self-Destruct ===
 function selfDestruct() {
-  document.body.innerHTML = "";
-  document.body.style.background = "black";
-  document.body.style.color = "black";
-  alert("you do not look at the code, i will not let u");
+  document.documentElement.innerHTML = "";
+  document.documentElement.style.background = "black";
+  document.documentElement.style.color = "black";
 }
 
 // Detect DevTools by window size
