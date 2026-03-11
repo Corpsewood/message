@@ -1,125 +1,82 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Message System</title>
-  <style>
-    body {
-      background: black;
-      color: white;
-      font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      padding: 20px;
-    }
-    #top-message {
-      font-size: 1.5em;
-      margin-bottom: 20px;
-      color: red;
-      text-align: center;
-    }
-    #chat {
-      border: 2px solid white;
-      padding: 10px;
-      width: 300px;
-      height: 300px;
-      overflow-y: auto;
-      margin-bottom: 10px;
-    }
-    #input-area {
-      display: flex;
-    }
-    #user-input {
-      flex: 1;
-      padding: 8px;
-      font-size: 1em;
-      border-radius: 5px 0 0 5px;
-      border: 2px solid white;
-      outline: none;
-    }
-    #send-button {
-      padding: 8px 12px;
-      font-size: 1em;
-      border: none;
-      background: white;
-      color: black;
-      border-radius: 0 5px 5px 0;
-      cursor: pointer;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Message System</title>
+<style>
+body{background:#000;color:#fff;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;padding:20px}
+#chat{border:2px solid #fff;width:300px;height:300px;overflow-y:auto;padding:10px;margin-bottom:10px}
+#input-area{display:flex}
+#user-input{flex:1;padding:8px;border:2px solid white}
+#send-button{padding:8px;background:white;color:black;border:none;cursor:pointer}
+</style>
 </head>
 <body>
-  <div id="top-message">You're accessing my soul...</div>
-  <div id="chat"></div>
-  <div id="input-area">
-    <input type="text" id="user-input" placeholder="Type something..." />
-    <button id="send-button">Send</button>
-  </div>
 
-  <script>
-    const chatDiv = document.getElementById('chat');
-    const userInput = document.getElementById('user-input');
-    const sendButton = document.getElementById('send-button');
+<div style="color:red;font-size:1.5em;margin-bottom:20px">You're accessing my soul...</div>
+<div id="chat"></div>
 
-    const replies = {
-      "hello": "Hello :>",
-      "how are you": "you are accessing my soul, u should know.",
-      "tell me a joke": "sorry but no.",
-      "what is your purpose": "my purpose is unknown as we all die in the end.",
-      "goodbye": "good, it is here.",
-      "old wind": "whats the point? do u wanna be eaten by this disgusting monster",
-      "null": "rotten, forgotten and missing. poor guy.",
-      "deep": "leader of some sort of cult. why does he look like a deer but like fully black?",
-      "fate": "some sort of unknown creature, it functions like a human, creepy eyes and everything. something is off",
-      "daed": "eaten by this old wind guy, missing.",
-      "god": "gods arent allowed. excuse me tall cyclops guy.",
-      "crowater": "Dude, leave us alone u disgusting scarecrow",
-      "zeath": "hm, seems to be wearing a black shirt with fur, same for the pants.",
-      "vill": "what are you doing here? im confused, and stop crying.",
-      "pleaze": "you okay? why do u have messy hair? did something happen?",
-      "fearful": "why dont u enter it here? https://corpsewood.github.io/Corpsewood/",
-      "fiv": "WHY DID U KILL NULL, FIV. YOU GUY WITH A RED SHIRT AND GRAY PANTS",
-      "the imagination": "the imagination is your imagination, you do not wanna mess with him, he is evil.",
-      "truth": "https://corpsewood.github.io/the-truth/",
-      "booking": "sigh why dont u listen? its gone. https://corpsewoodbooking.github.io/"
-    };
+<div id="input-area">
+<input id="user-input" placeholder="Type something...">
+<button id="send-button">Send</button>
+</div>
 
-    function addMessage(msg, isUser) {
-      const p = document.createElement('p');
-      p.textContent = msg;
-      if (isUser) {
-        p.style.textAlign = "right";
-      }
-      chatDiv.appendChild(p);
-      chatDiv.scrollTop = chatDiv.scrollHeight;
-    }
+<script>
 
-    function getBotReply(input) {
-      const key = input.toLowerCase().trim();
-      return replies[key] || "your message cannot be answered at the moment.";
-    }
+const chat=document.getElementById("chat")
+const input=document.getElementById("user-input")
+const btn=document.getElementById("send-button")
 
-    function sendMessage() {
-      const message = userInput.value.trim();
-      if (!message) return;
-      addMessage(message, true);
-      setTimeout(() => {
-        addMessage(getBotReply(message), false);
-      }, 500);
-      userInput.value = '';
-      userInput.focus();
-    }
+function add(msg,user){
+const p=document.createElement("p")
+p.textContent=msg
+if(user)p.style.textAlign="right"
+chat.appendChild(p)
+chat.scrollTop=chat.scrollHeight
+}
 
-    sendButton.addEventListener('click', sendMessage);
-    userInput.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') sendMessage();
-    });
-  </script>
+/* encrypted data blob (not readable) */
+const blob="W3siaSI6ImhlbGxvIiwiciI6IkhlbGxvIDo+In0seyJpIjoiaG93IGFyZSB5b3UiLCJyIjoieW91IGFyZSBhY2Nlc3NpbmcgbXkgc291bCwgdSBzaG91bGQga25vdy4ifV0="
+
+/* decode at runtime */
+function decode(){
+return JSON.parse(atob(blob))
+}
+
+function getReply(text){
+const data=decode()
+const key=text.toLowerCase().trim()
+
+for(let i=0;i<data.length;i++){
+if(data[i].i===key){
+return data[i].r
+}
+}
+
+return "your message cannot be answered at the moment."
+}
+
+function send(){
+const msg=input.value.trim()
+if(!msg)return
+
+add(msg,true)
+
+setTimeout(()=>{
+add(getReply(msg),false)
+},500)
+
+input.value=""
+input.focus()
+}
+
+btn.onclick=send
+input.addEventListener("keypress",e=>{
+if(e.key==="Enter")send()
+})
+
+</script>
+
 </body>
 </html>
-
-
-
